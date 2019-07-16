@@ -5,6 +5,7 @@ class Carro {
     private $marca;
     private $modelo;
     private $color;
+    private $test;
     
     public function __construct($matricula, $marca, $modelo, $color) {
         $this->matricula = $matricula;
