@@ -5,12 +5,46 @@
     </head>
     <body>
         <?php
+            
             require './Extra/HeaderCliente.php';
+            require 'Conexion.php';
+            
+            session_start();
+            
             $date = new DateTime('NOW');
             $fecha = $date->format('Y-m-d');
             $hora = $date->format('H:i');
             
+            if(isset($_SESSION['cliente'])) {
+                //$sql = "SELECT * FROM Solicitud WHERE id_usuarioCliente = ".$_SESSION['cliente']."";
+                $sql = "SELECT * FROM Usuario_Cliente INNER JOIN Cliente ON Usuario_Cliente.id_cliente = Cliente.id_cliente WHERE Usuario_Cliente.id_cliente = ".$_SESSION['cliente']."";
+                $stmt = sqlsrv_query($_conn, $sql);
+                $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_NUMERIC);
+                
+                if($row[0] > 0) {
+                    echo 'Bienvenido ' . $row[5];
+                    echo '<br>';
+                    
+                    $sql2 = "select Servicio.descripcion, Carro.modelo, Marca.nombre, Fecha from Solicitud INNER JOIN Servicio_Taller on Solicitud.id_servicioTaller = Servicio_Taller.id_servicioTaller 
+                    INNER JOIN Servicio on Servicio_Taller.id_servicio = Servicio.id_servicio INNER JOIN Carro on Solicitud.id_carro = Carro.id_carro 
+                    INNER JOIN Marca on Carro.id_marca = Marca.id_marca WHERE Solicitud.id_usuarioCliente =  ".$_SESSION['cliente']."";
+                    $stmt2 = sqlsrv_query($_conn, $sql2);
+                    while ($_row=sqlsrv_fetch_array($stmt2)){
+                        echo $_row[0] . " ";
+                        echo $_row[1] . " ";
+                        echo $_row[2] . " ";
+                        echo $_row[3]->format("Y/m/d");
+                    }
+                    
+                    
+                }
+            }
+            
+            
+            
+            
         ?>
+        
         <section id="main-content">
             <br>
             <h1><b><p style="color:#333">Cotizaciones</p></h1></b>

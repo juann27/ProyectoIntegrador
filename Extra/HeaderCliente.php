@@ -8,7 +8,7 @@
 
             <nav>
                 <ul>
-                    <li><a href="/ProyectoIntegrador/">Cerrar sesión</a></li>
+                    <li><a href="./CerrarSesion.php">Cerrar sesión</a></li>
                 </ul>
             </nav>
         </header>

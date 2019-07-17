@@ -8,20 +8,22 @@
             require_once './Extra/Header.php';
             require_once 'Conexion.php';
         
+            session_start();
+            
             $message = '';
 
             $usuario = $_POST['usuario'];
             $password = $_POST['contrasenia'];
 
             if(!empty($_POST['usuario']) && !empty($_POST['contrasenia'])) {
-                $consult = "SELECT COUNT(*) from Usuario_Cliente WHERE username = '".$usuario."' and pass = '".$password."'";
+                $consult = "SELECT * from Usuario_Cliente WHERE username = '".$usuario."' and pass = '".$password."'";
                 $stmt= sqlsrv_query($_conn, $consult);
                 $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_NUMERIC);
                 $password = $row[0];
                 
                 if($row[0] > 0) {
-                    session_start();
-                    $_SESSION['cliente'] = "$usuario";
+                    
+                    $_SESSION['cliente'] = $row[0];
                     header("Location: ./VistaCliente.php");
                 } else {
                     $message = "<span class=estiloError>Usuario y/o contraseña es inválido</span>";
