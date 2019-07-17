@@ -4,12 +4,14 @@ class Taller {
     private $idTaller;
     private $nombreLocal;
     private $telefono;
+    private $paginaWeb;
     private $direccion;
     
-    public function __construct($idTaller, $nombreLocal, $telefono, $direccion) {
+    public function __construct($idTaller, $nombreLocal, $telefono, $paginaWeb, $direccion) {
         $this->idTaller = $idTaller;
         $this->nombreLocal = $nombreLocal;
         $this->telefono = $telefono;
+        $this->paginaWeb = $paginaWeb;
         $this->direccion = $direccion;
     }
     
@@ -27,6 +29,14 @@ class Taller {
 
     function getDireccion() {
         return $this->direccion;
+    }
+    
+    function getPaginaWeb() {
+        return $this->paginaWeb;
+    }
+
+    function setPaginaWeb($paginaWeb) {
+        $this->paginaWeb = $paginaWeb;
     }
 
     function setIdTaller($idTaller) {

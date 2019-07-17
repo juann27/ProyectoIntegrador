@@ -8,7 +8,6 @@
             require_once './Extra/Header.php';
             require_once 'Conexion.php';
         
-            session_start();
             
             $message = '';
 
@@ -16,15 +15,20 @@
             $password = $_POST['contrasenia'];
 
             if(!empty($_POST['usuario']) && !empty($_POST['contrasenia'])) {
-                $consult = "SELECT * from Usuario_Cliente WHERE username = '".$usuario."' and pass = '".$password."'";
-                $stmt= sqlsrv_query($_conn, $consult);
-                $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_NUMERIC);
-                $password = $row[0];
+                $conexion = new Conexion("localhost, 1433", "sa", "Password1234", "Proyecto");
+                $_conn = $conexion->abrirConexion();
                 
-                if($row[0] > 0) {
-                    
-                    $_SESSION['cliente'] = $row[0];
+                $consultaCliente = sqlsrv_query($_conn, "SELECT * from Usuario_Cliente WHERE username = '".$usuario."' and pass = '".$password."'");
+                $consultaTaller = sqlsrv_query($_conn, "SELECT * from Usuario_Taller WHERE username = '".$usuario."' and pass = '".$password."'");
+
+                if(sqlsrv_fetch_array($consultaCliente)[0] > 0) {
+                    session_start();
+                    $_SESSION['cliente'] = $usuario;
                     header("Location: ./VistaCliente.php");
+                } else if (sqlsrv_fetch_array($consultaTaller)[0] > 0) {
+                    session_start();
+                    $_SESSION['taller'] = $usuario;
+                    header("Location: ./VistaTaller.php");
                 } else {
                     $message = "<span class=estiloError>Usuario y/o contraseña es inválido</span>";
                 }

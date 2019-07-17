@@ -16,8 +16,11 @@
             $hora = $date->format('H:i');
             
             if(isset($_SESSION['cliente'])) {
+                $conexion = new Conexion("localhost, 1433", "sa", "Password1234", "Proyecto");
+                $_conn = $conexion->abrirConexion();
+                
                 //$sql = "SELECT * FROM Solicitud WHERE id_usuarioCliente = ".$_SESSION['cliente']."";
-                $sql = "SELECT * FROM Usuario_Cliente INNER JOIN Cliente ON Usuario_Cliente.id_cliente = Cliente.id_cliente WHERE Usuario_Cliente.id_cliente = ".$_SESSION['cliente']."";
+                $sql = "SELECT * FROM Usuario_Cliente INNER JOIN Cliente ON Usuario_Cliente.id_cliente = Cliente.id_cliente WHERE Usuario_Cliente.username = '".$_SESSION['cliente']."'";
                 $stmt = sqlsrv_query($_conn, $sql);
                 $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_NUMERIC);
                 
@@ -27,7 +30,7 @@
                     
                     $sql2 = "select Servicio.descripcion, Carro.modelo, Marca.nombre, Fecha from Solicitud INNER JOIN Servicio_Taller on Solicitud.id_servicioTaller = Servicio_Taller.id_servicioTaller 
                     INNER JOIN Servicio on Servicio_Taller.id_servicio = Servicio.id_servicio INNER JOIN Carro on Solicitud.id_carro = Carro.id_carro 
-                    INNER JOIN Marca on Carro.id_marca = Marca.id_marca WHERE Solicitud.id_usuarioCliente =  ".$_SESSION['cliente']."";
+                    INNER JOIN Marca on Carro.id_marca = Marca.id_marca WHERE Solicitud.id_usuarioCliente =  ".$row[0]."";
                     $stmt2 = sqlsrv_query($_conn, $sql2);
                     while ($_row=sqlsrv_fetch_array($stmt2)){
                         echo $_row[0] . " ";
@@ -38,6 +41,8 @@
                     
                     
                 }
+            } else {
+                echo 'no';
             }
             
             
